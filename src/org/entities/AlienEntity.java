@@ -18,6 +18,8 @@ public class AlienEntity extends Entity {
 	private int x;
 	private int y;
 	
+	private int animationFrames;
+	
 	private Rectangle hitBox;
 	
 	private Image[] sprites;
@@ -26,6 +28,8 @@ public class AlienEntity extends Entity {
 	public AlienEntity(int initX, int initY){
 		this.x = initX;
 		this.y = initY;
+		
+		animationFrames = 0;
 		
 		this.hitBox = new Rectangle(initX + XOFFSET, initY + YOFFSET, 25, 25);
 		
@@ -37,7 +41,7 @@ public class AlienEntity extends Entity {
 
 	@Override
 	public void update(GameContainer gc, int delta) {
-		
+		this.animate();
 		
 	}
 
@@ -55,6 +59,17 @@ public class AlienEntity extends Entity {
 	@Override
 	public void die() {
 		InvaderScene.aliens.remove(this);
+	}
+	
+	private void animate(){
+		if(animationFrames <= 30){
+			this.currentSprite = sprites[1];
+		} else if(animationFrames <= 60){
+			this.currentSprite = sprites[0];
+		} else {
+			animationFrames = 0;
+		}
+		animationFrames++;
 	}
 
 }
