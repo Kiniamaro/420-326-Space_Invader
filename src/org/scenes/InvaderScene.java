@@ -35,14 +35,13 @@ public class InvaderScene extends BasicGameState {
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame scene, Graphics g) throws SlickException {
-		player.render(gc, scene, g);
 		for(Entity lazer : playerLazors){
 			lazer.render(gc, scene, g);
 		}
 		for(Entity alien : aliens){
 			alien.render(gc, scene, g);
 		}
-		
+			player.render(gc, scene, g);
 		
 	}
 

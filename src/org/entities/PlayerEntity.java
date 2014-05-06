@@ -17,12 +17,16 @@ public class PlayerEntity extends Entity {
 
 	private final int SPEED = 6;
 	
+	private final int SHOTCOOLDOWN = 15; //frames;
+	
 	private final int XOFFSET = 6;
 	private final int YOFFSET = 22;
 	
 	private int x;
 	private int y;
+	private int cooldownTime;
 	private boolean isShooting;
+	private boolean canShot;
 	
 	private Rectangle hitBox;
 	
@@ -32,8 +36,11 @@ public class PlayerEntity extends Entity {
 	
 	
 	public PlayerEntity(int initX, int initY){
+		
 		this.x = initX;
 		this.y = initY;
+		this.canShot = true;
+		this.cooldownTime = 0;
 		
 		this.hitBox = new Rectangle(initX + XOFFSET, initY + YOFFSET, 30, 18);
 		
@@ -46,22 +53,21 @@ public class PlayerEntity extends Entity {
 		
 		this.sprites = new Image[]{ stylesheet.getSprite(0, 9),
 									stylesheet.getSprite(1, 9)};
-		
 		this.currentSprite = sprites[0];
 	}
 
 	@Override
 	public void update(GameContainer gc, int delta) {
+		currentSprite = sprites[0];
+		this.checkCanShoot();
 		this.control();
-		currentSprite = isShooting ? sprites[1] : sprites[0];
-		
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame scene, Graphics g) {
 		g.drawImage(this.currentSprite, x, y);
-		g.setColor(org.newdawn.slick.Color.red); // for testing
-		g.draw(hitBox); // for testing
+	//	g.setColor(org.newdawn.slick.Color.red); // for testing
+	//	g.draw(hitBox); // for testing
 		
 	}
 	
@@ -87,8 +93,22 @@ public class PlayerEntity extends Entity {
 	
 	private void shoot(){
 		isShooting = true;
-		InvaderScene.playerLazors.add(new PlayerProjectile(this.x + XOFFSET, this.y + YOFFSET));
+		if(this.canShot){
+			InvaderScene.playerLazors.add(new PlayerProjectile(this.x + XOFFSET, this.y + YOFFSET));
+			this.cooldownTime = SHOTCOOLDOWN;
+			this.currentSprite = sprites[1];
+			canShot = false;
+		}
 	}
+	
+	private void checkCanShoot(){
+		
+		if(this.cooldownTime <= 0)
+			canShot = true;
+		else 
+			this.cooldownTime--;
+	}
+	
 	
 	private void moveLeft(){
 		if(hitBox.getX() >= 0){
