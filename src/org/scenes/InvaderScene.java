@@ -11,6 +11,7 @@ import org.entities.PlayerEntity;
 import org.lwjgl.opengl.Display;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -63,6 +64,8 @@ public class InvaderScene extends BasicGameState {
 		 	 for(Entity a : lazors){
 		 		 a.update(gc, delta);
 		 	 }
+		 	 
+		 	 keyEvents();
 	}
 
 	@Override
@@ -73,6 +76,15 @@ public class InvaderScene extends BasicGameState {
 			for(int j = 0; j < 5; j++){
 				InvaderScene.aliens.add(new AlienEntity((i * 50) + 20, j * 50));
 			}
+		}
+	}
+	
+	private void keyEvents(){
+		Input input = new Input(Game.HEIGHT);
+		
+		if(input.isKeyDown(Input.KEY_ESCAPE)){
+			System.out.println("bye bye");
+			System.exit(0);
 		}
 	}
 	
