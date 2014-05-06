@@ -33,9 +33,6 @@ public class GameOverScene extends BasicGameState {
 	}
 
 	@Override
-	public int getID() {
-		
-		return 1;
-	}
+	public int getID() {return 2;}
 
 }

@@ -8,9 +8,10 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class MenuScene extends BasicGameState{
 	
+	private int id;
 	
 	public MenuScene(int id){
-		
+		this.id = id;
 	}
 	
 
@@ -32,9 +33,6 @@ public class MenuScene extends BasicGameState{
 	}
 
 	@Override
-	public int getID() {
-		
-		return 1;
-	}
+	public int getID() {return id;}
 
 }
