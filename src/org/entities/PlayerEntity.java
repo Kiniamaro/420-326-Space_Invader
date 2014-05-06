@@ -1,69 +1,79 @@
 package org.entities;
 
-import org.game;
-import org.newdawn.slick.Color;
+
+import java.awt.Color;
+
+import org.Game;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.util.ResourceLoader;
+import org.scenes.InvaderScene;
 
 public class PlayerEntity extends Entity {
 
 	private final int SPEED = 6;
 	
+	private final int XOFFSET = 6;
+	private final int YOFFSET = 22;
+	
 	private int x;
 	private int y;
 	private boolean isShooting;
+	
+	private Rectangle hitBox;
 	
 	private Image[] sprites;
 	private Sprites stylesheet;
 	private Image currentSprite;
 	
+	
 	public PlayerEntity(int initX, int initY){
 		this.x = initX;
 		this.y = initY;
-		this.isShooting = false;
 		
+		this.hitBox = new Rectangle(initX + XOFFSET, initY + YOFFSET, 30, 18);
+		
+		this.isShooting = false;
 		try {
 			this.stylesheet = new Sprites(new Image ("Ressources/SpriteSheet.png"));
 		} catch (SlickException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		this.sprites = new Image[]{ stylesheet.getSprite(0, 9),
-									stylesheet.getSprite(1, 9) };
+									stylesheet.getSprite(1, 9)};
+		
 		this.currentSprite = sprites[0];
 	}
 
 	@Override
 	public void update(GameContainer gc, int delta) {
 		this.control();
-		currentSprite = isShooting ? sprites[1] : sprites[0]; 
+		currentSprite = isShooting ? sprites[1] : sprites[0];
 		
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame scene, Graphics g) {
 		g.drawImage(this.currentSprite, x, y);
+		g.setColor(org.newdawn.slick.Color.red); // for testing
+		g.draw(hitBox); // for testing
 		
 	}
 	
 	public void control(){
-		Input input = new Input(game.HEIGHT);
+		Input input = new Input(Game.HEIGHT);
 		
 		if(input.isKeyDown(Input.KEY_LEFT)){
-			if(x > 0)
-			this.x -= SPEED;
+			this.moveLeft();
 		}
 		
 		if(input.isKeyDown(Input.KEY_RIGHT)){
-			if(x <= game.WIDTH - 20)
-			this.x += SPEED;
+			this.moveRight();
 		}
 		
 		if(input.isKeyDown(Input.KEY_Z)){
@@ -77,8 +87,32 @@ public class PlayerEntity extends Entity {
 	
 	private void shoot(){
 		isShooting = true;
+		InvaderScene.playerLazors.add(new PlayerProjectile(this.x + XOFFSET, this.y + YOFFSET));
+	}
+	
+	private void moveLeft(){
+		if(hitBox.getX() >= 0){
+			this.hitBox.setX(hitBox.getX() - SPEED);
+			this.x -= SPEED;
+		}
+	}
+	
+	private void moveRight(){
+		if(hitBox.getX() + hitBox.getWidth() <= Game.WIDTH){
+			this.hitBox.setX(hitBox.getX() + SPEED );
+			this.x += SPEED;
+		}
+	}
+	
+	public Rectangle getHitBox(){
+		return this.hitBox;
 	}
 
+	@Override
+	public void die() {
+		
+		
+	}
 	
 	
 }
