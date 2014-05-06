@@ -1,6 +1,8 @@
 package org.entities;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 
 import org.Game;
 import org.newdawn.slick.Color;
@@ -45,11 +47,14 @@ public class PlayerProjectile extends Entity {
 	}
 	
 	private void checkCollision(ArrayList<Entity> entities){
-		for(Entity e : entities){
-			if(this.hitBox.intersects(e.getHitBox()));
-			e.die();
-			this.die();
-		}
+			for(Entity e : entities){
+				if(this.hitBox.intersects(e.getHitBox())){
+					this.die();
+					e.die();
+					break;
+				}
+			
+			}
 	}
 	
 	public void move(){

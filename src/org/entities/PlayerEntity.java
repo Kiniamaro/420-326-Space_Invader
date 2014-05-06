@@ -25,13 +25,11 @@ public class PlayerEntity extends Entity {
 	private int x;
 	private int y;
 	private int cooldownTime;
-	private boolean isShooting;
 	private boolean canShot;
 	
 	private Rectangle hitBox;
 	
 	private Image[] sprites;
-	private Sprites stylesheet;
 	private Image currentSprite;
 	
 	
@@ -44,15 +42,8 @@ public class PlayerEntity extends Entity {
 		
 		this.hitBox = new Rectangle(initX + XOFFSET, initY + YOFFSET, 30, 18);
 		
-		this.isShooting = false;
-		try {
-			this.stylesheet = new Sprites(new Image ("Ressources/SpriteSheet.png"));
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
-		
-		this.sprites = new Image[]{ stylesheet.getSprite(0, 9),
-									stylesheet.getSprite(1, 9)};
+		this.sprites = new Image[]{ Game.spriteSheet.getSprite(0, 9),
+									Game.spriteSheet.getSprite(1, 9)};
 		this.currentSprite = sprites[0];
 	}
 
@@ -82,17 +73,14 @@ public class PlayerEntity extends Entity {
 			this.moveRight();
 		}
 		
-		if(input.isKeyDown(Input.KEY_Z)){
+		if(input.isKeyDown(Input.KEY_Z))
 			shoot();
-		} else {
-			isShooting = false;
-		}
+
 		
 		
 	}
 	
 	private void shoot(){
-		isShooting = true;
 		if(this.canShot){
 			InvaderScene.playerLazors.add(new PlayerProjectile(this.x + XOFFSET, this.y + YOFFSET));
 			this.cooldownTime = SHOTCOOLDOWN;

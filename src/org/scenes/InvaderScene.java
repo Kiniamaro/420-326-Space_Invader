@@ -1,10 +1,14 @@
 package org.scenes;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 
 import org.Game;
+import org.entities.AlienEntity;
 import org.entities.Entity;
 import org.entities.PlayerEntity;
+import org.lwjgl.opengl.Display;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -31,30 +35,35 @@ public class InvaderScene extends BasicGameState {
 		playerLazors = new ArrayList<Entity>();
 		aliens = new ArrayList<Entity>();
 		
+		aliens.add(new AlienEntity(400, 400));
+		
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame scene, Graphics g) throws SlickException {
-		for(Entity lazer : playerLazors){
-			lazer.render(gc, scene, g);
-		}
-		for(Entity alien : aliens){
-			alien.render(gc, scene, g);
-		}
-			player.render(gc, scene, g);
+		player.render(gc, scene, g);
+	 	 Entity[] array = aliens.toArray(new Entity[0]);
+	 	 for(Entity a : array){
+	 		a.render(gc, scene, g);
+	 	 }
+	 	 Entity[] lazors = playerLazors.toArray(new Entity[0]);
+	 	 for(Entity a : lazors){
+	 		a.render(gc, scene, g);
+	 	 }
 		
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame scene, int delta) throws SlickException {
-		 player.update(gc, delta);
-			for(Entity lazer : playerLazors){
-				lazer.update(gc, delta);
-			}
-			for(Entity alien : aliens){
-				alien.update(gc, delta);
-			}
-		
+		 	player.update(gc, delta);
+		 	 Entity[] array = aliens.toArray(new Entity[0]);
+		 	 for(Entity a : array){
+		 		 a.update(gc, delta);
+		 	 }
+		 	 Entity[] lazors = playerLazors.toArray(new Entity[0]);
+		 	 for(Entity a : lazors){
+		 		 a.update(gc, delta);
+		 	 }
 	}
 
 	@Override
