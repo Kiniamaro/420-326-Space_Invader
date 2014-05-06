@@ -34,8 +34,7 @@ public class InvaderScene extends BasicGameState {
 		player = new PlayerEntity(300,Game.HEIGHT - 40);
 		playerLazors = new ArrayList<Entity>();
 		aliens = new ArrayList<Entity>();
-		
-		aliens.add(new AlienEntity(400, 400));
+		this.GenerateSwarm();
 		
 	}
 
@@ -69,5 +68,12 @@ public class InvaderScene extends BasicGameState {
 	@Override
 	public int getID() {return id;}
 	
+	private void GenerateSwarm(){
+		for(int i = 0; i < 15; i++){
+			for(int j = 0; j < 5; j++){
+				InvaderScene.aliens.add(new AlienEntity((i * 50) + 20, j * 50));
+			}
+		}
+	}
 	
 }
