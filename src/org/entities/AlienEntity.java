@@ -54,8 +54,6 @@ public class AlienEntity extends Entity {
 	@Override
 	public void render(GameContainer gc, StateBasedGame scene, Graphics g) {
 		g.drawImage(currentSprite, x, y);
-		g.setColor(Color.red);
-		g.draw(hitBox);
 		
 	}
 
