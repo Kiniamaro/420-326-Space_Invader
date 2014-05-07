@@ -19,6 +19,7 @@ public class AlienEntity extends Entity {
 	private int y;
 	
 	private int animationFrames;
+	private int shotCoolDown;
 	
 	private Rectangle hitBox;
 	
@@ -30,6 +31,7 @@ public class AlienEntity extends Entity {
 		this.y = initY;
 		
 		animationFrames = 0;
+		shotCoolDown = 120;
 		
 		this.hitBox = new Rectangle(initX + XOFFSET, initY + YOFFSET, 25, 25);
 		
@@ -42,12 +44,18 @@ public class AlienEntity extends Entity {
 	@Override
 	public void update(GameContainer gc, int delta) {
 		this.animate();
+		this.move();
+		this.updateHitBox();
+		shoot();
+		this.shotCoolDown++;
 		
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame scene, Graphics g) {
 		g.drawImage(currentSprite, x, y);
+		g.setColor(Color.red);
+		g.draw(hitBox);
 		
 	}
 
@@ -70,6 +78,59 @@ public class AlienEntity extends Entity {
 			animationFrames = 0;
 		}
 		animationFrames++;
+	}
+	
+	private void move(){
+		if(animationFrames % 10 == 0){
+			this.x -= 20;
+			if(this.hitBox.getX() <= 0){
+				this.x = Game.WIDTH;
+				this.y += 50;
+			}
+		}
+	}
+	
+	private void updateHitBox(){
+		hitBox.setX(this.x + XOFFSET);
+		hitBox.setY(this.y + YOFFSET);
+	}
+	
+	private void shoot(){
+		
+		if(this.hitBox.getCenterX() >= InvaderScene.player.getHitBox().getMinX() 
+				&& this.hitBox.getCenterX() <= InvaderScene.player.getHitBox().getMaxX()
+				&& canShoot()
+				&& this.shotCoolDown >= 60){
+			
+			InvaderScene.aliens.add(new InvaderProjectile(this.x + XOFFSET, this.y + YOFFSET));
+			this.shotCoolDown = 0;
+		}
+	}
+	
+	private boolean canShoot(){
+		boolean shoot = true;
+		for(Entity e : InvaderScene.aliens){
+			if( e.getClass() != this.getClass() && !isLast()){
+				shoot = false;
+				break;
+			}
+		}
+		return shoot;
+	}
+
+
+	private boolean isLast() {
+		boolean last = true;
+		
+		for(Entity e : InvaderScene.aliens)
+			if(this.getHitBox().getCenterX() >= e.getHitBox().getMinX() 
+					&& this.hitBox.getCenterX() <= e.getHitBox().getMaxX()
+					&& this.hitBox.getY() >= e.getHitBox().getY()
+					&& this.getClass() != e.getClass()){
+				last = false;
+				break;
+			}
+		return last;
 	}
 
 }

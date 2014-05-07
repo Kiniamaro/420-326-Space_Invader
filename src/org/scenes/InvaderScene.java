@@ -86,6 +86,7 @@ public class InvaderScene extends BasicGameState {
 			System.out.println("bye bye");
 			System.exit(0);
 		}
+		
 	}
 	
 }

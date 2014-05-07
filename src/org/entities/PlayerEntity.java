@@ -75,7 +75,9 @@ public class PlayerEntity extends Entity {
 		
 		if(input.isKeyDown(Input.KEY_Z))
 			shoot();
-
+		
+		if(input.isKeyDown(Input.KEY_X))
+			megaShot();
 		
 		
 	}
@@ -83,6 +85,18 @@ public class PlayerEntity extends Entity {
 	private void shoot(){
 		if(this.canShot){
 			InvaderScene.playerLazors.add(new PlayerProjectile(this.x + XOFFSET, this.y + YOFFSET));
+			this.cooldownTime = SHOTCOOLDOWN;
+			this.currentSprite = sprites[1];
+			canShot = false;
+		}
+	}
+	
+	private void megaShot(){
+		if (this.canShot){
+			for(int i = 0; i < 25; i++){
+				InvaderScene.playerLazors.add(new PlayerProjectile(this.x -25 +  (i * 3), this.y + YOFFSET));
+			}
+			
 			this.cooldownTime = SHOTCOOLDOWN;
 			this.currentSprite = sprites[1];
 			canShot = false;
