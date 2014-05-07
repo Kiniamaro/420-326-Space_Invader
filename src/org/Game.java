@@ -26,9 +26,9 @@ public class Game extends StateBasedGame {
 			app = new AppGameContainer(new Game());
 			app.setDisplayMode(WIDTH, HEIGHT, false);
 			app.setVSync(true);
-			app.setTargetFrameRate(60);
 			app.setMinimumLogicUpdateInterval(20);
 			app.setMaximumLogicUpdateInterval(20);
+			app.setIcon("Ressources/Icon.jpg");
 			app.start();
 		} catch (SlickException e) {
 
