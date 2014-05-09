@@ -6,6 +6,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 import org.scenes.InvaderScene;
@@ -54,7 +55,9 @@ public class AlienEntity extends Entity {
 	@Override
 	public void render(GameContainer gc, StateBasedGame scene, Graphics g) {
 		g.drawImage(currentSprite, x, y);
-		
+		g.setColor(Color.red);
+		g.draw( new Line(this.getHitBox().getCenterX(),this.getHitBox().getCenterY() + 50, 
+							 this.getHitBox().getCenterX(),this.getHitBox().getCenterY() + 100 ));
 	}
 
 	@Override
@@ -95,24 +98,17 @@ public class AlienEntity extends Entity {
 	
 	private void shoot(){
 		
-		if(this.hitBox.getCenterX() >= InvaderScene.player.getHitBox().getMinX() 
-				&& this.hitBox.getCenterX() <= InvaderScene.player.getHitBox().getMaxX()
-				&& canShoot()
-				&& this.shotCoolDown >= 60){
-			
+		if( this.isPlayerUnder() && canShoot() && this.shotCoolDown >= 60){
 			InvaderScene.aliens.add(new InvaderProjectile(this.x + XOFFSET, this.y + YOFFSET));
 			this.shotCoolDown = 0;
 		}
 	}
 	
 	private boolean canShoot(){
-		boolean shoot = true;
-		for(Entity e : InvaderScene.aliens){
-			if( e.getClass() != this.getClass() && !isLast()){
-				shoot = false;
-				break;
-			}
-		}
+		boolean shoot = false;
+			if(this.isLast())
+				shoot = true;
+			
 		return shoot;
 	}
 
@@ -120,15 +116,23 @@ public class AlienEntity extends Entity {
 	private boolean isLast() {
 		boolean last = true;
 		
-		for(Entity e : InvaderScene.aliens)
-			if(this.getHitBox().getCenterX() >= e.getHitBox().getMinX() 
-					&& this.hitBox.getCenterX() <= e.getHitBox().getMaxX()
-					&& this.hitBox.getY() >= e.getHitBox().getY()
-					&& this.getClass() != e.getClass()){
+		Line line = new Line(this.getHitBox().getCenterX(),this.getHitBox().getCenterY() + 40, 
+							 this.getHitBox().getCenterX(),this.getHitBox().getCenterY() + 100 );
+		
+		for(Entity e : InvaderScene.aliens){
+			if(line.intersects(e.getHitBox()))
 				last = false;
 				break;
+
 			}
 		return last;
+	}
+	
+	private boolean isPlayerUnder(){
+		if(this.hitBox.getCenterX() >= InvaderScene.player.getHitBox().getMinX() 
+				&& this.hitBox.getCenterX() <= InvaderScene.player.getHitBox().getMaxX())
+				return true;
+		return false;
 	}
 
 }
