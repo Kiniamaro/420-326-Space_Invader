@@ -29,6 +29,7 @@ public class Game extends StateBasedGame {
 			app.setMinimumLogicUpdateInterval(20);
 			app.setMaximumLogicUpdateInterval(20);
 			app.setIcon("Ressources/Icon.jpg");
+			app.setShowFPS(false);
 			app.start();
 		} catch (SlickException e) {
 
@@ -54,7 +55,7 @@ public class Game extends StateBasedGame {
 		this.getState(invader).init(gc, this);
 		this.getState(gameOver).init(gc, this);
 		
-		this.enterState(invader); // to change
+		this.enterState(menu); // to change
 		
 	}
 

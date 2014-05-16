@@ -27,7 +27,7 @@ public class PlayerEntity extends Entity {
 	private int cooldownTime;
 	private boolean canShot;
 	
-	private boolean alive = true;
+	private boolean dead = false;
 	
 	private Rectangle hitBox;
 	
@@ -134,11 +134,11 @@ public class PlayerEntity extends Entity {
 
 	@Override
 	public void die() {
-		this.alive = false;
+		this.dead = true;
 	}
 
 	public boolean isDead() {
-		return this.alive;
+		return this.dead;
 	}
 	
 	

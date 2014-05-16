@@ -77,6 +77,17 @@ public class InvaderScene extends BasicGameState {
 		 		 a.update(gc, delta);
 		 	 }
 		 	 
+		 	 if(player.isDead()){
+		 		scene.init(gc);
+		 		GameOverScene.message = "Vous avez Perdu!";
+		 		scene.enterState(Game.gameOver);
+		 	 }
+		 	 
+		 	 if(aliens.isEmpty()){
+		 		 scene.init(gc);
+		 		 GameOverScene.message = "Bravo vous avez Gagniez!";
+		 		 scene.enterState(Game.gameOver);
+		 	 }
 		 	 
 		 	 keyEvents();
 	}
