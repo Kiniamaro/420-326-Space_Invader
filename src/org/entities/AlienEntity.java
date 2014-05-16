@@ -18,6 +18,7 @@ public class AlienEntity extends Entity {
 	
 	private int x;
 	private int y;
+	private int[] pos; //to see if it can shoot
 	
 	private int animationFrames;
 	private int shotCoolDown;
@@ -27,9 +28,10 @@ public class AlienEntity extends Entity {
 	private Image[] sprites;
 	private Image currentSprite;
 
-	public AlienEntity(int initX, int initY){
+	public AlienEntity(int initX, int initY, int[] pos){
 		this.x = initX;
 		this.y = initY;
+		this.pos = pos;
 		
 		animationFrames = 0;
 		shotCoolDown = 120;
@@ -55,14 +57,15 @@ public class AlienEntity extends Entity {
 	@Override
 	public void render(GameContainer gc, StateBasedGame scene, Graphics g) {
 		g.drawImage(currentSprite, x, y);
-		g.setColor(Color.red);
-		g.draw( new Line(this.getHitBox().getCenterX(),this.getHitBox().getCenterY() + 50, 
-							 this.getHitBox().getCenterX(),this.getHitBox().getCenterY() + 100 ));
 	}
 
 	@Override
 	public Rectangle getHitBox() {
 		return this.hitBox;
+	}
+	
+	public int[] getPos(){
+		return this.pos;
 	}
 
 	@Override
@@ -98,35 +101,26 @@ public class AlienEntity extends Entity {
 	
 	private void shoot(){
 		
-		if( this.isPlayerUnder() && canShoot() && this.shotCoolDown >= 60){
-			InvaderScene.aliens.add(new InvaderProjectile(this.x + XOFFSET, this.y + YOFFSET));
+		if( this.isPlayerUnder() && isLast() && this.shotCoolDown >= 60){
+			InvaderScene.alienLazors.add(new InvaderProjectile(this.x + XOFFSET, this.y + YOFFSET));
 			this.shotCoolDown = 0;
 		}
 	}
 	
-	private boolean canShoot(){
-		boolean shoot = false;
-			if(this.isLast())
-				shoot = true;
-			
-		return shoot;
-	}
-
-
-	private boolean isLast() {
+	private boolean isLast(){
 		boolean last = true;
 		
-		Line line = new Line(this.getHitBox().getCenterX(),this.getHitBox().getCenterY() + 40, 
-							 this.getHitBox().getCenterX(),this.getHitBox().getCenterY() + 100 );
-		
-		for(Entity e : InvaderScene.aliens){
-			if(line.intersects(e.getHitBox()))
+		for(AlienEntity a : InvaderScene.aliens){
+			if(this.getPos()[0] == a.getPos()[0] &&
+			   this.getPos()[1] < a.getPos()[1]){
 				last = false;
 				break;
-
 			}
+		}
 		return last;
 	}
+	
+
 	
 	private boolean isPlayerUnder(){
 		if(this.hitBox.getCenterX() >= InvaderScene.player.getHitBox().getMinX() 

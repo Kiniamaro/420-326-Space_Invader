@@ -46,6 +46,7 @@ public class InvaderProjectile extends Entity {
 	private void checkCollision(){
 		if(this.getHitBox().intersects(InvaderScene.player.getHitBox())){
 			this.die();
+			InvaderScene.player.die();
 		}
 	}
 	
@@ -59,6 +60,6 @@ public class InvaderProjectile extends Entity {
 
 	@Override
 	public void die() {
-		InvaderScene.aliens.remove(this);
+		InvaderScene.alienLazors.remove(this);
 	}
 }

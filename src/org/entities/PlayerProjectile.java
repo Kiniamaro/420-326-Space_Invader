@@ -46,7 +46,7 @@ public class PlayerProjectile extends Entity {
 		
 	}
 	
-	private void checkCollision(ArrayList<Entity> entities){
+	private void checkCollision(ArrayList<AlienEntity> entities){
 			for(Entity e : entities){
 				if(this.hitBox.intersects(e.getHitBox())){
 					this.die();
